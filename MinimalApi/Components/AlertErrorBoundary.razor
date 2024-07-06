@@ -1,0 +1,17 @@
+@inherits ErrorBoundary
+@inject DialogService _dialogService
+
+@ChildContent
+
+@code {
+
+    protected override async Task OnErrorAsync(Exception exception)
+    {
+        await base.OnErrorAsync(exception);
+
+        await _dialogService.Alert(exception.ToString(), "Error!", new AlertOptions { OkButtonText = "Ok" });
+
+        Recover();
+    }
+
+}

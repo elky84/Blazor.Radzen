@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalApi", "MinimalApi\MinimalApi.csproj", "{32E4242D-C49B-4F8B-805B-8799836DA129}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalApi.Test", "MinimalApi.Test\MinimalApi.Test.csproj", "{058C0B19-F73A-4312-B349-5C178385CC34}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{32E4242D-C49B-4F8B-805B-8799836DA129}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32E4242D-C49B-4F8B-805B-8799836DA129}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32E4242D-C49B-4F8B-805B-8799836DA129}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32E4242D-C49B-4F8B-805B-8799836DA129}.Release|Any CPU.Build.0 = Release|Any CPU
+		{058C0B19-F73A-4312-B349-5C178385CC34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{058C0B19-F73A-4312-B349-5C178385CC34}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{058C0B19-F73A-4312-B349-5C178385CC34}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{058C0B19-F73A-4312-B349-5C178385CC34}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,27 @@
+<RadzenHeader>
+    <RadzenStack Orientation="Orientation.Horizontal" AlignItems="AlignItems.Center" Gap="0">
+        <RadzenSidebarToggle Click="@(() => _navMenuExpanded = !_navMenuExpanded)"/>
+        <RadzenLabel Text="@_headerName"/>
+    </RadzenStack>
+</RadzenHeader>
+<RadzenSidebar @bind-Expanded="@_navMenuExpanded">
+    <RadzenPanelMenu ShowArrow>
+        <RadzenPanelMenuItem Text="Home" Icon="home" Path="/"/>
+        @* <RadzenPanelMenuItem Text="Game Resource" Icon="book" Expanded> *@
+        @* 	<RadzenPanelMenuItem Text="List Keys" Path="/resource/list" /> *@
+        @* 	<RadzenPanelMenuItem Text="Upload" Path="/resource/upload" /> *@
+        @* 	<RadzenPanelMenuItem Text="Config" Path="/resource/config" /> *@
+        @* </RadzenPanelMenuItem> *@
+        <RadzenPanelMenuItem Text="Todo">
+            <RadzenPanelMenuItem Text="Todo" Path="/Todo"/>
+        </RadzenPanelMenuItem>
+    </RadzenPanelMenu>
+</RadzenSidebar>
+
+@code {
+    private bool _navMenuExpanded = true;
+
+    [Inject] private IWebHostEnvironment _env { get; init; } = null!;
+
+    private string _headerName => $"Minimal Api - {_env.EnvironmentName}";
+}
