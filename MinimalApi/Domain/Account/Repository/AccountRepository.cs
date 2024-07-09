@@ -3,6 +3,7 @@ using Dapper;
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dto;
 using MySqlConnector;
+using System.Data;
 
 namespace MinimalApi.Domain.Account.Repository;
 
@@ -12,11 +13,12 @@ public class AccountRepository
 
     private readonly IMapper _mapper;
 
-    public AccountRepository(IMapper mapper, string? connectionString)
+    public AccountRepository(IMapper mapper, MySqlConnection mySqlConnection)
     {
         _mapper = mapper;
-        _connection = new MySqlConnection(connectionString);
-        _connection.Open();
+        _connection = mySqlConnection;
+        if(_connection.State != ConnectionState.Open)
+            _connection.Open();
     }
 
     public async Task<IEnumerable<AccountDao>> All()

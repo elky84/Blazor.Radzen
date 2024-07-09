@@ -7,6 +7,7 @@ using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dto;
 using MinimalApi.Domain.Account.Repository;
 using MinimalApi.Domain.Common;
+using MySqlConnector;
 using Radzen;
 using System.Net;
 
@@ -46,7 +47,8 @@ builder.Services.AddSingleton(configuration.CreateMapper());
 
 #endregion //AutoMapper
 
-builder.Services.AddSingleton(new AccountRepository(configuration.CreateMapper(), builder.Configuration.GetConnectionString("DB")));
+builder.Services.AddScoped<MySqlConnection>((sp) => new MySqlConnection(builder.Configuration.GetConnectionString("DB")));
+builder.Services.AddScoped<AccountRepository>();
 
 #endregion // builder
 
