@@ -1,7 +1,7 @@
 using AutoMapper;
 using Dapper;
 using MinimalApi.Domain.Account.Dao;
-using MinimalApi.Domain.Account.Dto;
+using MinimalApi.Domain.Account.Dao;
 using MySqlConnector;
 using System.Data;
 
@@ -38,7 +38,7 @@ public class AccountRepository
             $"SELECT * FROM Account WHERE AccountId = '{accountId}'");
     }
 
-    public async Task<AccountDao> InsertAsync(AccountDto accountDto)
+    public async Task<AccountDao> InsertAsync(AccountDao accountDao)
     {
         const string query = """
                              INSERT INTO Account(
@@ -57,13 +57,12 @@ public class AccountRepository
                              SELECT LAST_INSERT_ID();
                              """;
 
-        var id = await _connection.ExecuteScalarAsync<ulong>(query, accountDto);
-        var accountDao = _mapper.Map<AccountDao>(accountDto);
+        var id = await _connection.ExecuteScalarAsync<ulong>(query, accountDao);
         accountDao.AccountUid = id;
         return accountDao;
     }
 
-    public async Task<int> UpdateAsync(AccountDto accountDto)
+    public async Task<int> UpdateAsync(AccountDao accountDao)
     {
         const string query = """
                              UPDATE Account
@@ -73,16 +72,16 @@ public class AccountRepository
                                   , UpdatedAt = @UpdatedAt
                               WHERE AccountUid = @AccountUid;
                              """;
-        return await _connection.ExecuteAsync(query, accountDto);
+        return await _connection.ExecuteAsync(query, accountDao);
     }
 
-    public async Task<AccountDao> UpsertAsync(AccountDto accountDto)
+    public async Task<AccountDao> UpsertAsync(AccountDao accountDao)
     {
-        var affected = await UpdateAsync(accountDto);
+        var affected = await UpdateAsync(accountDao);
         if (affected == 0)
-            return await InsertAsync(accountDto);
+            return await InsertAsync(accountDao);
 
-        return _mapper.Map<AccountDao>(accountDto);
+        return _mapper.Map<AccountDao>(accountDao);
     }
 
     public async Task DeleteAsync(long accountUid)

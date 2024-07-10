@@ -4,7 +4,7 @@ using MinimalApi.Domain.Account.Dto;
 using MinimalApi.Domain.Account.Repository;
 using MinimalApi.Domain.Account.Type;
 
-namespace MinimalApi.Domain.Account.Api;
+namespace MinimalApi.Endpoint.Api;
 
 public static class SignIn
 {
@@ -13,7 +13,7 @@ public static class SignIn
         var accountDao = await repository.GetById(dto.AccountId);
         if (accountDao == null)
         {
-            var newAccount = new AccountDto
+            var newAccount = new AccountDao
             {
                 AccountId = dto.AccountId,
                 AccountPassword = dto.AccountPassword,

@@ -2,11 +2,13 @@ using System.Text.Json.Serialization;
 using AutoMapper;
 using Microsoft.AspNetCore.Diagnostics;
 using MinimalApi.Components;
-using MinimalApi.Domain.Account.Api;
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dto;
+using MinimalApi.Domain.Account.Mapper;
 using MinimalApi.Domain.Account.Repository;
 using MinimalApi.Domain.Common;
+using MinimalApi.Endpoint;
+using MinimalApi.Endpoint.Api;
 using MySqlConnector;
 using Radzen;
 using System.Net;
@@ -35,8 +37,7 @@ builder.Services.AddControllers().AddJsonOptions(x =>
 
 var configuration = new MapperConfiguration(cfg =>
 {
-    cfg.CreateMap<AccountDao, AccountDto>();
-    cfg.CreateMap<AccountDto, AccountDao>();
+    AccountMapper.Set(cfg);
 });
 
 // only during development, validate your mappings; remove it before release
@@ -79,10 +80,7 @@ app.UseExceptionHandler(exceptionHandlerApp
 
 var api = app.MapGroup("/api");
 
-var routeGroup = api.MapGroup("Account")
-    .WithTags(["Account"]);
-
-api.MapPost("/GuestSignIn", SignIn.Handle);
+AccountEndpoint.Map(api);
 
 #endregion api
 
