@@ -9,6 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Apparatus.Dapper.Json" Version="1.0.0" />
+        <PackageReference Include="Apparatus.Dapper.Json.Newtonsoft" Version="1.0.0" />
         <PackageReference Include="AutoMapper" Version="13.0.1" />
         <PackageReference Include="Dapper" Version="2.1.35" />
         <PackageReference Include="MySqlConnector" Version="2.3.7" />

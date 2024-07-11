@@ -1,4 +1,5 @@
 using AutoMapper;
+using Dapper.Json;
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dto;
 using MinimalApi.Domain.Account.Repository;
@@ -18,6 +19,7 @@ public static class SignIn
                 AccountId = dto.AccountId,
                 AccountPassword = dto.AccountPassword,
                 AccountStatus = AccountStatus.Normal,
+                Detail = new Json<DetailDao>(new DetailDao([new DetailInfoDao(5, 10)])),
                 CreatedAt = DateTime.Now
             };
 

@@ -45,12 +45,14 @@ public class AccountRepository
                                     AccountId
                                   , AccountPassword
                                   , AccountStatus
+                                  , Detail
                                   , UpdatedAt
                                   , CreatedAt)
                              VALUES (
                                     @AccountId
                                   , @AccountPassword
                                   , @AccountStatus
+                                  , @Detail
                                   , @UpdatedAt
                                   , @CreatedAt);
 
@@ -69,6 +71,7 @@ public class AccountRepository
                                 SET AccountId = @AccountId
                                   , AccountPassword = @AccountPassword
                                   , AccountStatus = @AccountStatus
+                                  , Detail = @Detail
                                   , UpdatedAt = @UpdatedAt
                               WHERE AccountUid = @AccountUid;
                              """;
