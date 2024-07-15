@@ -1,5 +1,6 @@
 using AutoMapper;
 using Dapper;
+using MinimalApi.Common.Database;
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dao;
 using MySqlConnector;
@@ -9,33 +10,35 @@ namespace MinimalApi.Domain.Account.Repository;
 
 public class AccountRepository
 {
-    private readonly MySqlConnection _connection;
+    private readonly DbContext _dbContext;
 
     private readonly IMapper _mapper;
 
-    public AccountRepository(IMapper mapper, MySqlConnection mySqlConnection)
+    public AccountRepository(IMapper mapper, DbContext dbContext)
     {
         _mapper = mapper;
-        _connection = mySqlConnection;
-        if(_connection.State != ConnectionState.Open)
-            _connection.Open();
+        _dbContext = dbContext;
+        _dbContext.Open();
     }
 
     public async Task<IEnumerable<AccountDao>> All()
     {
-        return await _connection.QueryAsync<AccountDao>("SELECT * FROM Account");
+        return await _dbContext.Connection.QueryAsync<AccountDao>("SELECT * FROM Account",
+            transaction: _dbContext.Transaction);
     }
 
     public async Task<AccountDao?> GetByUid(long accountUid)
     {
-        return await _connection.QueryFirstOrDefaultAsync<AccountDao>(
-            $"SELECT * FROM Account WHERE AccountUid = {accountUid}");
+        return await _dbContext.Connection.QueryFirstOrDefaultAsync<AccountDao>(
+            $"SELECT * FROM Account WHERE AccountUid = {accountUid}",
+            transaction: _dbContext.Transaction);
     }
 
     public async Task<AccountDao?> GetById(string accountId)
     {
-        return await _connection.QueryFirstOrDefaultAsync<AccountDao>(
-            $"SELECT * FROM Account WHERE AccountId = '{accountId}'");
+        return await _dbContext.Connection.QueryFirstOrDefaultAsync<AccountDao>(
+            $"SELECT * FROM Account WHERE AccountId = '{accountId}'",
+            transaction: _dbContext.Transaction);
     }
 
     public async Task<AccountDao> InsertAsync(AccountDao accountDao)
@@ -59,7 +62,8 @@ public class AccountRepository
                              SELECT LAST_INSERT_ID();
                              """;
 
-        var id = await _connection.ExecuteScalarAsync<ulong>(query, accountDao);
+        var id = await _dbContext.Connection.ExecuteScalarAsync<ulong>(query, accountDao,
+            transaction: _dbContext.Transaction);
         accountDao.AccountUid = id;
         return accountDao;
     }
@@ -75,7 +79,8 @@ public class AccountRepository
                                   , UpdatedAt = @UpdatedAt
                               WHERE AccountUid = @AccountUid;
                              """;
-        return await _connection.ExecuteAsync(query, accountDao);
+        return await _dbContext.Connection.ExecuteAsync(query, accountDao,
+            transaction: _dbContext.Transaction);
     }
 
     public async Task<AccountDao> UpsertAsync(AccountDao accountDao)
@@ -89,6 +94,7 @@ public class AccountRepository
 
     public async Task DeleteAsync(long accountUid)
     {
-        await _connection.ExecuteAsync($"DELETE FROM Account WHERE AccountUid = {accountUid}");
+        await _dbContext.Connection.ExecuteAsync($"DELETE FROM Account WHERE AccountUid = {accountUid}",
+            transaction: _dbContext.Transaction);
     }
 }

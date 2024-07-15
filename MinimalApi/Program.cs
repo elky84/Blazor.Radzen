@@ -3,6 +3,7 @@ using AutoMapper;
 using Dapper;
 using Dapper.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using MinimalApi.Common.Database;
 using MinimalApi.Components;
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Mapper;
@@ -54,7 +55,7 @@ builder.Services.AddSingleton(configuration.CreateMapper());
 
 #endregion //AutoMapper
 
-builder.Services.AddScoped<MySqlConnection>((sp) => new MySqlConnection(builder.Configuration.GetConnectionString("DB")));
+builder.Services.AddScoped<DbContext>();
 builder.Services.AddScoped<AccountRepository>();
 
 #endregion // builder
