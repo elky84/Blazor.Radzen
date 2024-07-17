@@ -1,18 +1,16 @@
-using System.Text.Json.Serialization;
-using AutoMapper;
 using Dapper;
 using Dapper.Json;
 using Microsoft.AspNetCore.Diagnostics;
 using MinimalApi.Common.Database;
 using MinimalApi.Components;
 using MinimalApi.Domain.Account.Dao;
-using MinimalApi.Domain.Account.Mapper;
 using MinimalApi.Domain.Account.Repository;
 using MinimalApi.Domain.Common;
 using MinimalApi.Endpoint;
-using MySqlConnector;
 using Radzen;
 using System.Net;
+using System.Reflection;
+using System.Text.Json.Serialization;
 
 #region builder
 
@@ -42,16 +40,7 @@ SqlMapper.AddTypeHandler(new JsonTypeHandler<DetailDao>());
 
 #region AutoMapper
 
-var configuration = new MapperConfiguration(cfg =>
-{
-    AccountMapper.Set(cfg);
-});
-
-// only during development, validate your mappings; remove it before release
-#if DEBUG
-configuration.AssertConfigurationIsValid();
-#endif
-builder.Services.AddSingleton(configuration.CreateMapper());
+builder.Services.AddAutoMapper(Assembly.GetExecutingAssembly());
 
 #endregion //AutoMapper
 
@@ -74,14 +63,14 @@ app.UseAntiforgery();
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode();
 
-app.UseExceptionHandler(exceptionHandlerApp 
-    => exceptionHandlerApp.Run(async context 
+app.UseExceptionHandler(exceptionHandlerApp
+    => exceptionHandlerApp.Run(async context
         => await context.Response.WriteAsJsonAsync(
             new ResponseHeader
             {
                 StatusCode = (int)HttpStatusCode.InternalServerError,
                 Message = context.Features.Get<IExceptionHandlerPathFeature>()?.Error.Message
-            } )));
+            })));
 
 #region api
 
@@ -96,4 +85,6 @@ app.MapGet("/hello", () => "Hello World!"); // 테스트 코드에서 사용 중
 await app.RunAsync();
 
 // ReSharper disable once ClassNeverInstantiated.Global
-public partial class Program { } // for UnitTest
+public partial class Program
+{
+} // for UnitTest

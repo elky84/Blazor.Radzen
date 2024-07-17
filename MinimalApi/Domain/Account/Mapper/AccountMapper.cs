@@ -2,23 +2,23 @@
 using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Dto;
 
-namespace MinimalApi.Domain.Account.Mapper;
-
-public static class AccountMapper
+namespace MinimalApi.Domain.Account.Mapper
 {
-    public static void Set(IMapperConfigurationExpression cfg)
+    public class AccountMapper : Profile
     {
-        cfg.CreateMap<AccountDao, AccountDto>()
-            .ForMember(x => x.Detail, opt => opt.MapFrom(x => x.Detail != null ? x.Detail.Value ?? null : null));
+        public AccountMapper()
+        {
+            CreateMap<AccountDao, AccountDto>()
+                .ForMember(x => x.Detail, opt => opt.MapFrom(x => x.Detail != null ? x.Detail.Value ?? null : null));
 
-        cfg.CreateMap<AccountDto, AccountDao>()
-            .ForMember(x => x.Detail, opt => opt.ConvertUsing(new DetailConverter()));
+            CreateMap<AccountDto, AccountDao>()
+                .ForMember(x => x.Detail, opt => opt.ConvertUsing(new DetailConverter()));
 
-        cfg.CreateMap<DetailDao, DetailDto>();
-        cfg.CreateMap<DetailDto, DetailDao>();
-        
-        cfg.CreateMap<DetailInfoDao, DetailInfoDto>();
-        cfg.CreateMap<DetailInfoDto, DetailInfoDao>();
+            CreateMap<DetailDao, DetailDto>();
+            CreateMap<DetailDto, DetailDao>();
 
+            CreateMap<DetailInfoDao, DetailInfoDto>();
+            CreateMap<DetailInfoDto, DetailInfoDao>();
+        }
     }
 }
