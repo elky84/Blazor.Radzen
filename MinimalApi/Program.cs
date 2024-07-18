@@ -32,6 +32,8 @@ builder.Services.AddControllers().AddJsonOptions(x =>
     x.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
+builder.Services.AddSingleton<ChangedBags>();
+
 #region DapperMapper
 
 SqlMapper.AddTypeHandler(new JsonTypeHandler<DetailDao>());
