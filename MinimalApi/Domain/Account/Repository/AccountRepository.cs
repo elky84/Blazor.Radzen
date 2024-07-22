@@ -1,5 +1,4 @@
 using AutoMapper;
-using Dapper;
 using MinimalApi.Common.Database;
 using MinimalApi.Domain.Account.Dao;
 
@@ -25,22 +24,19 @@ public class AccountRepository
 
     public async Task<IEnumerable<AccountDao>> All()
     {
-        return await _dbContext.Connection.QueryAsync<AccountDao>("SELECT * FROM Account",
-            transaction: _dbContext.Transaction);
+        return await _dbContext.QueryAsync<AccountDao>("SELECT * FROM Account");
     }
 
     public async Task<AccountDao?> GetByUid(long accountUid)
     {
-        return await _dbContext.Connection.QueryFirstOrDefaultAsync<AccountDao>(
-            $"SELECT * FROM Account WHERE AccountUid = {accountUid}",
-            transaction: _dbContext.Transaction);
+        return await _dbContext.QueryFirstOrDefaultAsync<AccountDao>(
+            $"SELECT * FROM Account WHERE AccountUid = {accountUid}");
     }
 
     public async Task<AccountDao?> GetById(string accountId)
     {
-        return await _dbContext.Connection.QueryFirstOrDefaultAsync<AccountDao>(
-            $"SELECT * FROM Account WHERE AccountId = '{accountId}'",
-            transaction: _dbContext.Transaction);
+        return await _dbContext.QueryFirstOrDefaultAsync<AccountDao>(
+            $"SELECT * FROM Account WHERE AccountId = '{accountId}'");
     }
 
     public async Task<AccountDao> InsertAsync(AccountDao accountDao)
@@ -64,8 +60,7 @@ public class AccountRepository
                              SELECT LAST_INSERT_ID();
                              """;
 
-        var id = await _dbContext.Connection.ExecuteScalarAsync<ulong>(query, accountDao,
-            _dbContext.Transaction);
+        var id = await _dbContext.ExecuteScalarAsync<ulong>(query);
         accountDao.AccountUid = id;
         _changedBag.Upsert(accountDao);
         return accountDao;
@@ -83,8 +78,7 @@ public class AccountRepository
                               WHERE AccountUid = @AccountUid;
                              """;
         _changedBag.Upsert(accountDao);
-        return await _dbContext.Connection.ExecuteAsync(query, accountDao,
-            _dbContext.Transaction);
+        return await _dbContext.ExecuteAsync(query, accountDao);
     }
 
     public async Task<AccountDao> UpsertAsync(AccountDao accountDao)
@@ -100,7 +94,6 @@ public class AccountRepository
 
     public async Task DeleteAsync(long accountUid)
     {
-        await _dbContext.Connection.ExecuteAsync($"DELETE FROM Account WHERE AccountUid = {accountUid}",
-            transaction: _dbContext.Transaction);
+        await _dbContext.ExecuteAsync($"DELETE FROM Account WHERE AccountUid = {accountUid}");
     }
 }
