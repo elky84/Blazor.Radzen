@@ -1,9 +1,8 @@
 using Dapper;
-using Dapper.Json;
 using Microsoft.AspNetCore.Diagnostics;
+using MinimalApi.Common.Dapper;
 using MinimalApi.Common.Database;
 using MinimalApi.Components;
-using MinimalApi.Domain.Account.Dao;
 using MinimalApi.Domain.Account.Repository;
 using MinimalApi.Domain.Common;
 using MinimalApi.Endpoint;
@@ -36,7 +35,7 @@ builder.Services.AddSingleton<ChangedBags>();
 
 #region DapperMapper
 
-SqlMapper.AddTypeHandler(new JsonTypeHandler<DetailDao>());
+SqlMapper.AddTypeHandler(new DetailTypeHandler());
 
 #endregion // DapperMapper
 

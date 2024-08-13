@@ -19,7 +19,7 @@ public static class SignIn
                 AccountId = dto.AccountId,
                 AccountPassword = dto.AccountPassword,
                 AccountStatus = AccountStatus.Normal,
-                Detail = new Json<DetailDao>(new DetailDao([new DetailInfoDao(5, 10)])),
+                Detail = new DetailDao([new DetailInfoDao(5, 10)]),
                 CreatedAt = DateTime.Now
             };
 
