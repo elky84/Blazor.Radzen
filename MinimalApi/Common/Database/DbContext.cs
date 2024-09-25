@@ -1,12 +1,11 @@
-﻿using Dapper;
+﻿using System.Data;
+using Dapper;
 using MySqlConnector;
-using System.Data;
 
 namespace MinimalApi.Common.Database;
 
 public class DbContext : IDisposable
 {
-
     public DbContext(IConfiguration configuration)
     {
         ConnectionString = configuration.GetConnectionString("DB");
@@ -50,6 +49,7 @@ public class DbContext : IDisposable
         {
             await Transaction.CommitAsync();
         }
+
         Transaction = null;
     }
 
@@ -58,6 +58,7 @@ public class DbContext : IDisposable
         if (Transaction != null)
         {
             await Transaction.RollbackAsync();
+            await Transaction.DisposeAsync();
         }
 
         Transaction = null;
@@ -69,8 +70,8 @@ public class DbContext : IDisposable
         int? commandTimeout = null,
         CommandType? commandType = null)
     {
-        transaction = transaction ?? Transaction;
-        if (transaction != null)
+        transaction ??= Transaction;
+        if (transaction != null && transaction.Connection == Connection)
         {
             return Connection.Query<T>(sql, param, transaction, true, commandTimeout, commandType);
         }
@@ -86,7 +87,7 @@ public class DbContext : IDisposable
         CommandType? commandType = null)
     {
         transaction ??= Transaction;
-        if (transaction != null)
+        if (transaction != null && transaction.Connection == Connection)
         {
             return Connection.QueryFirstOrDefault<T>(sql, param, transaction, commandTimeout, commandType);
         }
@@ -102,7 +103,7 @@ public class DbContext : IDisposable
         CommandType? commandType = null)
     {
         transaction ??= Transaction;
-        if (transaction != null)
+        if (transaction != null && transaction.Connection == Connection)
         {
             return Connection.ExecuteScalar<T>(sql, param, transaction, commandTimeout, commandType);
         }
@@ -118,7 +119,7 @@ public class DbContext : IDisposable
         CommandType? commandType = null)
     {
         transaction ??= Transaction;
-        if (transaction != null)
+        if (transaction != null && transaction.Connection == Connection)
         {
             return Connection.Execute(sql, param, transaction, commandTimeout, commandType);
         }
