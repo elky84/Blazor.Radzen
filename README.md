@@ -1,4 +1,4 @@
-# MinimalApi
+# MinimalApi.Radzen
 
 C# ASP.NET Minimal API를 이용하는 예시
 
